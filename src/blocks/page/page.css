@@ -1,0 +1,6 @@
+.page {
+    background-color: #000000;
+    margin: 0 auto 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}

@@ -1,0 +1,12 @@
+.popup__text-error {
+    margin: 5px 36px 0;
+    height: 30px;
+    border: 0;
+    color: rgba(255, 0, 0, 1);
+    padding: 0 0 0 0;
+    font-family: 'Inter', Arial, sans-serif;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+    opacity: 1;
+}

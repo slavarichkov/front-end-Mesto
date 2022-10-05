@@ -1,0 +1,9 @@
+.popup__input-conainer {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+.popup__input-conainer:nth-child(3) {
+    margin-top: 30px;
+}
