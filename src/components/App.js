@@ -139,8 +139,10 @@ function App() {
         }, 3000);
         setRegisterIn(true);
       })
-      .catch((err) => {console.log(err); console.log(1212
-        )});
+      .catch((err) => {
+        console.log(err); console.log(1212
+        )
+      });
   };
 
   //пробросить данные из инпутов и отправить на сервер для авторизации пользователя
@@ -154,15 +156,19 @@ function App() {
         password: dataUser.password,
         email: dataUser.email,
       })
-    }).then((response) => {
-      response.json();
-    }).then((data) => {
-      localStorage.setItem('token', data.token);
-      localStorage.setItem("email", dataUser.email);
-      getAuth(data.token);
-    })
+    }).then((response) => { return response.json() })
+      .then((data) => {
+        if (data.message === 'Incorrect email address or password') {
+          console.log('не корректные данные');
+          setIsAuthUserUnsuccessfull(true);
+        } else {
+          localStorage.setItem('token', data.token);
+          localStorage.setItem("email", dataUser.email);
+          getAuth(data.token);
+        }
+      })
       .catch((err) => {
-        setIsAuthUserUnsuccessfull(true);
+        console.log('неверные данные авторизации')
         console.log(err);
       });
   };
