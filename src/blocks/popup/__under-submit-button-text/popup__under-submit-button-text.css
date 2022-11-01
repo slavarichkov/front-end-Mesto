@@ -9,3 +9,7 @@
     color: white;
     margin-top: 15px;
 }
+
+.popup__under-submit-button-text:hover {
+    opacity: 0.5;
+}

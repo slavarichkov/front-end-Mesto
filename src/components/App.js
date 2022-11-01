@@ -29,6 +29,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(true);
   const [isRegisterPopupOpened, setIsRegisterPopupOpened] = useState(false);
   const [isAuthUnsuccessfull, setIsAuthUserUnsuccessfull] = useState(false);
+  const [registerIn, setRegisterIn] = useState(false);
   const popupClosedState = [  // необходимо для использования в useEffect и закрытия попапов
     isEditAvatarPopupOpen,
     isAddPlacePopupOpen,
@@ -119,7 +120,7 @@ function App() {
 
   //пробросить данные для регистрации через АПИ
   function handleRegister(data) {
-    fetch(`https://auth.nomoreparties.co/signup`, {
+    return fetch(`https://auth.nomoreparties.co/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -130,15 +131,21 @@ function App() {
       })
     }).then((response) => response.json())
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         setIsRegisterPopupOpened(true); // при положительном ответе открыть попап подверждения регистрации
+        setTimeout(() => { // закрыть подверждение через 3 сек.
+          setIsRegisterPopupOpened(false);
+          setRegisterIn(false);
+        }, 3000);
+        setRegisterIn(true);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {console.log(err); console.log(1212
+        )});
   };
 
   //пробросить данные из инпутов и отправить на сервер для авторизации пользователя
   function handleLogin(dataUser) {
-    fetch(`https://auth.nomoreparties.co/signin`, {
+    return fetch(`https://auth.nomoreparties.co/signin`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -148,20 +155,17 @@ function App() {
         email: dataUser.email,
       })
     }).then((response) => {
-      return response.json();
+      response.json();
     }).then((data) => {
       localStorage.setItem('token', data.token);
       localStorage.setItem("email", dataUser.email);
       getAuth(data.token);
     })
       .catch((err) => {
+        setIsAuthUserUnsuccessfull(true);
         console.log(err);
       });
   };
-
-  function test() {
-    console.log(localStorage.getItem('token'));
-  }
 
   //запрос на сервер для авторизации
   function getAuth(tkn) {
@@ -172,12 +176,14 @@ function App() {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${tkn}`,
       }
-    })
-      .then(res => res.json())
-      .then(data => {
+    }).then(res => res.json())
+      .then(() => {
         setLoggedIn(true);
       })
-      .catch(err => { console.log(err) });
+      .catch(err => {
+        console.log(err);
+        setIsAuthUserUnsuccessfull(false);
+      });
   }
 
   //валидация токена
@@ -313,7 +319,7 @@ function App() {
           </Route>
           {/* Регистрация нового пользователя */}
           <Route path="/sign-up">
-            <Register onRegister={handleRegister} />
+            {registerIn ? <Redirect to="/sign-in" /> : <Register onRegister={handleRegister} />}
           </Route>
           <Route exact path="/">
             {loading ? <Spinner /> : <></>}
