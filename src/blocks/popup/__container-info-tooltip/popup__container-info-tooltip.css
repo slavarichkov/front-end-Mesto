@@ -1,0 +1,6 @@
+.popup__container-info-tooltip {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 60px auto 60px;
+}

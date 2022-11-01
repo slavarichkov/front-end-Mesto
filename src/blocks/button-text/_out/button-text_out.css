@@ -1,0 +1,32 @@
+.button-text_out {
+    font-family: 'Inter', Arial, sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 22px;
+    margin: 0;
+    overflow: hidden;
+    max-width: 358px;
+    text-decoration: none;
+    background-color: black;
+    color: white;
+    border: 0;
+}
+
+.button-text_out:nth-child(2) {
+    color: #A9A9A9;
+    font-weight: 400;
+    padding: 0 0 0 24px;
+    cursor: pointer;
+}
+
+.button-text_out:nth-child(2):hover {
+    opacity: 0.5;
+}
+
+@media screen and (max-width: 600px) {
+    .button-text_out {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16.94px;
+    }
+}

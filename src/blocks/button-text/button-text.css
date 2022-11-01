@@ -1,0 +1,23 @@
+.button-text {
+    font-family: 'Inter', Arial, sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    color: #FFFFFF;
+    margin: 0;
+    overflow: hidden;
+    max-width: 358px;
+    text-decoration: none;
+}
+
+.button-text:hover {
+    opacity: 0.7;
+}
+
+@media screen and (max-width: 600px) {
+    .button-text {
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16.94px;
+    }
+}

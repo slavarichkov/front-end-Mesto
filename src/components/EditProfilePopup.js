@@ -41,11 +41,13 @@ function EditProfilePopup({ isOpen, isClose, onUpdateUser }) {
     }
 
     return (
-        < PopupWithForm name='popup_user_input'
+        < PopupWithForm
+            name='popup_user_input'
             text='Редактировать профиль'
             isOpen={isOpen}
             isClose={isClose}
             onSubmit={handleSubmit}
+            textButtonSubmit ='Сохранить'
             validationOptions={(validationMassegeName === '' & validationMassegeDescription === '') ? false : true}
             children={
                 <>

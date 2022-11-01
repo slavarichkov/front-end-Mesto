@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -10,6 +11,10 @@ import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import Spinner from './Spinner';
+import Login from './Login';
+import Register from './Register';
+import InfoTooltip from './InfoTooltip';
+
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -21,6 +26,18 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
+  const [isRegisterPopupOpened, setIsRegisterPopupOpened] = useState(false);
+  const [isAuthUnsuccessfull, setIsAuthUserUnsuccessfull] = useState(false);
+  const popupClosedState = [  // необходимо для использования в useEffect и закрытия попапов
+    isEditAvatarPopupOpen,
+    isAddPlacePopupOpen,
+    isDeletePlacePopupOpen,
+    isEditProfilePopupOpen,
+    isImagePopupOpened,
+    isRegisterPopupOpened,
+    isAuthUnsuccessfull
+  ];
 
   // функции открытия попапов
   function handleEditAvatarClick() {
@@ -52,6 +69,8 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsDeletePlace(false);
     setIsImagePopupOpened(false);
+    setIsRegisterPopupOpened(false);
+    setIsAuthUserUnsuccessfull(false)
   }
 
   //закрыть на Esc
@@ -98,6 +117,87 @@ function App() {
       })
   }
 
+  //пробросить данные для регистрации через АПИ
+  function handleRegister(data) {
+    fetch(`https://auth.nomoreparties.co/signup`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        password: data.password,
+        email: data.email,
+      })
+    }).then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setIsRegisterPopupOpened(true); // при положительном ответе открыть попап подверждения регистрации
+      })
+      .catch((err) => console.log(err));
+  };
+
+  //пробросить данные из инпутов и отправить на сервер для авторизации пользователя
+  function handleLogin(dataUser) {
+    fetch(`https://auth.nomoreparties.co/signin`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        password: dataUser.password,
+        email: dataUser.email,
+      })
+    }).then((response) => {
+      return response.json();
+    }).then((data) => {
+      localStorage.setItem('token', data.token);
+      localStorage.setItem("email", dataUser.email);
+      getAuth(data.token);
+    })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  function test() {
+    console.log(localStorage.getItem('token'));
+  }
+
+  //запрос на сервер для авторизации
+  function getAuth(tkn) {
+    return fetch(`https://auth.nomoreparties.co/users/me`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${tkn}`,
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        setLoggedIn(true);
+      })
+      .catch(err => { console.log(err) });
+  }
+
+  //валидация токена
+  function tokenCheck() {
+    const jwt = localStorage.getItem('token');
+    if (jwt !== null) {
+      setLoggedIn(true);
+      getAuth(jwt);
+    } else {
+      setLoggedIn(false);
+    }
+  }
+
+
+  //проверка авторизации пользователя
+  useEffect(() => {
+    tokenCheck(localStorage.getItem('token'));
+  }, [loggedIn])
+
+
   // запрос данных пользователя и карточек с сервера
   useEffect(() => {
     setLoading(true);
@@ -115,7 +215,7 @@ function App() {
   //Слушатели на закрытие попапов по Esc или клику на оверлей
   useEffect(() => {
     if (
-      [isEditAvatarPopupOpen, isAddPlacePopupOpen, isDeletePlacePopupOpen, isEditProfilePopupOpen, isImagePopupOpened].includes(true)
+      popupClosedState.includes(true)
     ) {
       document.addEventListener('click', handleCloseAllPopupsClickOverlay);
       document.addEventListener('keydown', handleCloseAllPopupsEcs);
@@ -124,7 +224,7 @@ function App() {
         document.removeEventListener('keydown', handleCloseAllPopupsEcs);
       }
     }
-  }, [isEditAvatarPopupOpen, isAddPlacePopupOpen, isEditProfilePopupOpen, isDeletePlacePopupOpen, isImagePopupOpened]);
+  }, popupClosedState);
 
   // запрос данных пользователя и карточек с сервера
   useEffect(() => {
@@ -197,20 +297,40 @@ function App() {
       })
   }
 
+  function handleLogginOut(data) {
+    setLoggedIn(data);
+    localStorage.clear();
+  }
+
   return (
     <currentUserContext.Provider value={currentUser}>
       <div className="page">
-        <Header />
-        {loading ? <Spinner /> : <></>}
-        <Main onEditAvatar={handleEditAvatarClick}
-          onEditProfile={handleEditProfileClick}
-          onAddPlace={handleAddPlaceClick}
-          onCardClick={handleCardClick}
-          cards={cards}
-          onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
-        />
-        <Footer />
+        <Header handleLoggedInStateChanged={handleLogginOut} />
+        <Switch>
+          {/* Авторизация пользователя */}
+          <Route path="/sign-in">
+            {loggedIn ? <Redirect to="/" /> : <Login onLogin={handleLogin} />}
+          </Route>
+          {/* Регистрация нового пользователя */}
+          <Route path="/sign-up">
+            <Register onRegister={handleRegister} />
+          </Route>
+          <Route exact path="/">
+            {loading ? <Spinner /> : <></>}
+            {loggedIn ?
+              <Main onEditAvatar={handleEditAvatarClick}
+                onEditProfile={handleEditProfileClick}
+                onAddPlace={handleAddPlaceClick}
+                onCardClick={handleCardClick}
+                cards={cards}
+                onCardLike={handleCardLike}
+                onCardDelete={handleCardDelete}
+              /> : <Redirect to="/sign-in" />}
+          </Route>
+        </Switch>
+        <Footer loggedIn={loggedIn} />
+        {/* Информационное окно об успешной регистрации */}
+        <InfoTooltip isRegister={isRegisterPopupOpened} isClose={closeAllPopups} isAuth={isAuthUnsuccessfull} />
         {/**  <!--Попап Редактирование профиля --> */}
         <EditProfilePopup isOpen={isEditProfilePopupOpen} isClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
         {/** <!--Попап добавление изображений(карточек) пользователем --> */}

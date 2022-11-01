@@ -31,6 +31,7 @@ function EditAvatarPopup({ isOpen, isClose, onUpdateAvatar }) {
             isOpen={isOpen}
             isClose={isClose}
             onSubmit={handleSubmit}
+            textButtonSubmit ='Сохранить'
             validationOptions={(validationMassegeLink === '') ? false : true}
             children={
                 <div className="popup__input-conainer">

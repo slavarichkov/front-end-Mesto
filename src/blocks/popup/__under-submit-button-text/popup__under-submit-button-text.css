@@ -1,0 +1,11 @@
+.popup__under-submit-button-text {
+    font-family: 'Inter', Arial, sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16.94px;
+    height: 17px;
+    text-decoration: none;
+    text-align: center;
+    color: white;
+    margin-top: 15px;
+}

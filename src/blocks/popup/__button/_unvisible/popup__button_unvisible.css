@@ -1,0 +1,6 @@
+.popup__button_unvisible {
+    opacity: 0;
+    pointer-events: none;
+    margin: 0;
+    height: 0px;
+}
