@@ -331,7 +331,7 @@ function App() {
         {/** <!--Попап добавление изображений(карточек) пользователем --> */}
         <AddPlacePopup isOpen={isAddPlacePopupOpen} isClose={closeAllPopups} onAddPlace={handleAddPlaceSubmit} />
         {/** <!--Попап форма редактирования аватара --> */}
-        <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
+        <EditAvatarPopup isOpen={isEditAvatarPopupOpen} isClose={closeAllPopups} onUpdateAvatar={handleUpdateAvatar} />
         {/** <!-- Попап подтверждения удаления карточки --> */}
         <PopupWithForm name='popup_card_remove'
           text='Вы уверены?'
