@@ -231,8 +231,7 @@ function App() {
   function handleRegister(data) {
     auth.register(data)
       .then((data) => {
-        console.log(typeof data['message']);
-        console.log(data)
+        
         //записать в переменную ошибку -> вывести в инф.окно
         let messageError = data.message;
         if (Object.keys(data).includes('message')) { messageError = data.message }
@@ -260,7 +259,6 @@ function App() {
     auth.login(dataUser)
       .then((data) => {
         if (data.message === 'Incorrect email address or password') {
-          console.log('не корректные данные');
           setIsAuthUserUnsuccessfull(true);
         } else {
           localStorage.setItem('token', data.token);
@@ -269,7 +267,6 @@ function App() {
         }
       })
       .catch((err) => {
-        console.log('неверные данные авторизации')
         console.log(err);
       });
   };
