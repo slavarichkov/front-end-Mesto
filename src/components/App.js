@@ -41,6 +41,68 @@ function App() {
     isAuthUnsuccessfull
   ];
 
+  //...Работа с Апи(получение и редактирование инф на сервере: данные пользователя, карточки)...
+
+  //пробросить данные из EditProfilePopup наверх для Апи и обновления стейта currentUser
+  function handleUpdateUser(data) {
+    setLoading(true);
+    api.sendUserInfo(data)
+      .then((dataUser) => {
+        setCurrentUser(dataUser);
+        setIsEditProfilePopupOpen(false);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+      });
+  }
+
+  //пробросить данные для обновления аватара и отправки на сервер
+  function handleUpdateAvatar(data) {
+    setLoading(true);
+    api.sendAvatar(data)
+      .then((dataAvatar) => {
+        setCurrentUser(dataAvatar);
+        setIsEditAvatarPopupOpen(false);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+      })
+  }
+
+  // запрос данных пользователя и карточек с сервера
+  useEffect(() => {
+    setLoading(true);
+    api.getUserInfo()
+      .then((infoUser) => {
+        setCurrentUser(infoUser);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+      })
+  }, [])
+
+  // запрос данных пользователя и карточек с сервера
+  useEffect(() => {
+    setLoading(true);
+    api.getImages()
+      .then((initialCards) => {
+        setCards(initialCards);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+      })
+  }, []);
+
+  //...Работа с попапами...
+
   // функции открытия попапов
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true)
@@ -89,41 +151,85 @@ function App() {
     }
   }
 
-  //пробросить данные из EditProfilePopup наверх для Апи и обновления стейта currentUser
-  function handleUpdateUser(data) {
-    setLoading(true);
-    api.sendUserInfo(data)
-      .then((dataUser) => {
-        setCurrentUser(dataUser);
-        setIsEditProfilePopupOpen(false);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setLoading(false);
-        console.log(err);
-      });
+  //Слушатели на закрытие попапов по Esc или клику на оверлей
+  useEffect(() => {
+    if (
+      popupClosedState.includes(true)
+    ) {
+      document.addEventListener('click', handleCloseAllPopupsClickOverlay);
+      document.addEventListener('keydown', handleCloseAllPopupsEcs);
+      return () => {
+        document.removeEventListener('click', handleCloseAllPopupsClickOverlay);
+        document.removeEventListener('keydown', handleCloseAllPopupsEcs);
+      }
+    }
+  }, popupClosedState);
+
+  // ...Работа с карточками...
+
+  // управлять лайком
+  function handleCardLike(cardId, likes) {
+    const isLiked = likes.some(i => i._id === currentUser._id); // проверяем, есть ли уже лайк на этой карточке
+    //Отправляем запрос в API и получаем обновлённые данные карточки
+    if (!isLiked) {
+      setLoading(true);
+      api.addLike(cardId)
+        .then((newCard) => {
+          setLoading(false);
+          setCards((cards) => cards.map((c) => c._id === cardId ? newCard : c))
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.log(err);
+        }) // данные карточки с лайком - стейт всех карточек -  мапом найти карточку с таким же айди, если нет, то новый стейт, если нет - не менять
+    } else {
+      setLoading(true);
+      api.deleteLike(cardId)
+        .then((newCard) => {
+          setLoading(false);
+          setCards((cards) => cards.map((c) => c._id === cardId ? newCard : c))
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.log(err);
+        })
+    }
   }
 
-  //пробросить данные для обновления аватара и отправки на сервер
-  function handleUpdateAvatar(data) {
+  //удаление карточки
+  function handleCardDelete(cardId) {
     setLoading(true);
-    api.sendAvatar(data)
-      .then((dataAvatar) => {
-        setCurrentUser(dataAvatar);
-        setIsEditAvatarPopupOpen(false);
+    api.deleteCard(cardId)
+      .then((newCard) => {
+        setLoading(false);
+        setCards((cards) => cards.filter((c) => c._id !== cardId))
+          .catch((err) => {
+            console.log(err);
+          })
+      })
+  }
+
+  //отправка карточки на сервер и обновление стейта для отрисовки 
+  function handleAddPlaceSubmit(data) {
+    setLoading(true);
+    api.sendImages(data)
+      .then((newCard) => {
+        setCards([newCard, ...cards]);
+        setIsAddPlacePopupOpen(false);
         setLoading(false);
       })
       .catch((err) => {
-        setLoading(false);
         console.log(err);
+        setLoading(false);
       })
   }
+
+  //...Регистрация и Авторизация...
 
   //пробросить данные для регистрации через АПИ
   function handleRegister(data) {
     auth.register(data)
       .then((data) => {
-        //console.log(data);
         setIsRegisterPopupOpened(true); // при положительном ответе открыть попап подверждения регистрации
         setTimeout(() => { // закрыть подверждение через 3 сек.
           setIsRegisterPopupOpened(false);
@@ -184,106 +290,6 @@ function App() {
   useEffect(() => {
     tokenCheck(localStorage.getItem('token'));
   }, [loggedIn])
-
-
-  // запрос данных пользователя и карточек с сервера
-  useEffect(() => {
-    setLoading(true);
-    api.getUserInfo()
-      .then((infoUser) => {
-        setCurrentUser(infoUser);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setLoading(false);
-        console.log(err);
-      })
-  }, [])
-
-  //Слушатели на закрытие попапов по Esc или клику на оверлей
-  useEffect(() => {
-    if (
-      popupClosedState.includes(true)
-    ) {
-      document.addEventListener('click', handleCloseAllPopupsClickOverlay);
-      document.addEventListener('keydown', handleCloseAllPopupsEcs);
-      return () => {
-        document.removeEventListener('click', handleCloseAllPopupsClickOverlay);
-        document.removeEventListener('keydown', handleCloseAllPopupsEcs);
-      }
-    }
-  }, popupClosedState);
-
-  // запрос данных пользователя и карточек с сервера
-  useEffect(() => {
-    setLoading(true);
-    api.getImages()
-      .then((initialCards) => {
-        setCards(initialCards);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setLoading(false);
-        console.log(err);
-      })
-  }, []);
-
-  // управлять лайком
-  function handleCardLike(cardId, likes) {
-    const isLiked = likes.some(i => i._id === currentUser._id); // проверяем, есть ли уже лайк на этой карточке
-    //Отправляем запрос в API и получаем обновлённые данные карточки
-    if (!isLiked) {
-      setLoading(true);
-      api.addLike(cardId)
-        .then((newCard) => {
-          setLoading(false);
-          setCards((cards) => cards.map((c) => c._id === cardId ? newCard : c))
-        })
-        .catch((err) => {
-          setLoading(false);
-          console.log(err);
-        }) // данные карточки с лайком - стейт всех карточек -  мапом найти карточку с таким же айди, если нет, то новый стейт, если нет - не менять
-    } else {
-      setLoading(true);
-      api.deleteLike(cardId)
-        .then((newCard) => {
-          setLoading(false);
-          setCards((cards) => cards.map((c) => c._id === cardId ? newCard : c))
-        })
-        .catch((err) => {
-          setLoading(false);
-          console.log(err);
-        })
-    }
-  }
-
-  //удаление карточки
-  function handleCardDelete(cardId) {
-    setLoading(true);
-    api.deleteCard(cardId)
-      .then((newCard) => {
-        setLoading(false);
-        setCards((cards) => cards.filter((c) => c._id !== cardId))
-          .catch((err) => {
-            console.log(err);
-          })
-      })
-  }
-
-  //отправка карточки на сервер и обновление стейта для отрисовки 
-  function handleAddPlaceSubmit(data) {
-    setLoading(true);
-    api.sendImages(data)
-      .then((newCard) => {
-        setCards([newCard, ...cards]);
-        setIsAddPlacePopupOpen(false);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-      })
-  }
 
   // выйти из аккаунта (пробрасывается из Header) 
   function handleLogginOut(data) {
