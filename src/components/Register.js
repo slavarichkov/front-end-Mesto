@@ -7,8 +7,8 @@ function Register({ onRegister }) {
     // Стейты, в которых содержятся значения инпута
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [validationEmail, setValidationEmail] = useState('');
-    const [validationPassword, setValidationPassword] = useState('');
+    const [validationEmail, setValidationEmail] = useState('Введите email');
+    const [validationPassword, setValidationPassword] = useState('Введите пароль');
 
     // Обработчики изменения инпута - обновляет стейт
     function handleChangeEmail(e) { //почта
@@ -42,6 +42,7 @@ function Register({ onRegister }) {
             buttonVisibleControl='popup__close-button_unvisibled'
             textButtonSubmit='Зарегистрироваться'
             colorButtonSubmit='popup__button_color'
+            validationOptions={(validationEmail === '' && validationPassword === '') ? false : true}
             children={
                 <>
                     <div className="popup__input-conainer popup__input-conainer_auth">
@@ -51,7 +52,7 @@ function Register({ onRegister }) {
                         <span className="popup__text-error" id="error-firstname">{validationEmail}</span>
                     </div>
                     <div className="popup__input-conainer popup__input-conainer_auth">
-                        <input type="text" placeholder="Пароль" className="popup__input popup__input_auth"
+                        <input type="password" placeholder="Пароль" className="popup__input popup__input_auth"
                             id="username-input" minLength="2" required onChange={handleChangePassword}
                         />
                         <span className="popup__text-error" id="error-firstname">{validationPassword}</span>

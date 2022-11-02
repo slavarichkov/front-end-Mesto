@@ -20,7 +20,7 @@ function AddPlacePopup({ isOpen, isClose, onAddPlace }) {
         setValidationMassegeLink(e.target.validationMessage);
     }
 
-    //отправка на сервер 
+    //Передать данные = отправка на сервер 
     function handleSubmit(e) {
         e.preventDefault();
         onAddPlace({
@@ -45,6 +45,7 @@ function AddPlacePopup({ isOpen, isClose, onAddPlace }) {
             isOpen={isOpen}
             isClose={isClose}
             onSubmit={handleSubmit}
+            textButtonSubmit={'Сохранить'}
             validationOptions={(validationMassegeName === '' && validationMassegeLink === '') ? false : true}
             children={
                 <>

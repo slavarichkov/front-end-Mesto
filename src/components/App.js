@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -309,6 +309,7 @@ function App() {
       })
   }
 
+  // выйти из аккаунта (пробрасывается из Header) 
   function handleLogginOut(data) {
     setLoggedIn(data);
     localStorage.clear();

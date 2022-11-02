@@ -10,3 +10,9 @@
     line-height: 15px;
     opacity: 1;
 }
+
+@media screen and (max-width: 900px) {
+    .popup__text-error {
+       margin-left: 22px;
+    }
+}

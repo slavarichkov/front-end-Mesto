@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PopupWithForm from './PopupWithForm';
-import { Link } from 'react-router-dom'; 
 
 function Login({ onLogin }) {
     // Стейты, в которых содержятся значения инпута
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [validationEmail, setValidationEmail] = useState('');
-    const [validationPassword, setValidationPassword] = useState('');
+    const [validationEmail, setValidationEmail] = useState('Введите email');
+    const [validationPassword, setValidationPassword] = useState('Введите пароль');
 
     // Обработчики изменения инпута - обновляет стейт
     function handleChangeEmail(e) {
@@ -31,7 +30,6 @@ function Login({ onLogin }) {
     }
 
     return (
-
         <PopupWithForm
             name='popup_open popup__auth'
             text='Вход'
@@ -42,6 +40,7 @@ function Login({ onLogin }) {
             buttonVisibleControl='popup__close-button_unvisibled'
             textButtonSubmit='Войти'
             colorButtonSubmit='popup__button_color'
+            validationOptions= {(validationEmail === '' && validationPassword === '') ? false : true}
             children={
                 <>
                     <div className="popup__input-conainer popup__input-conainer_auth">
@@ -51,14 +50,13 @@ function Login({ onLogin }) {
                         <span className="popup__text-error" id="error-firstname">{validationEmail}</span>
                     </div>
                     <div className="popup__input-conainer popup__input-conainer_auth">
-                        <input type="text" placeholder="Пароль" className="popup__input popup__input_auth"
+                        <input type="password" placeholder="Пароль" className="popup__input popup__input_auth"
                             id="username-input" minLength="2" onChange={handleChangePassword} required
                         />
                         <span className="popup__text-error" id="error-firstname">{validationPassword}</span>
                     </div>
                 </>
             }
-
 
         />
 
