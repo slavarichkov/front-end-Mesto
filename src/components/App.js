@@ -14,6 +14,7 @@ import Spinner from './Spinner';
 import Login from './Login';
 import Register from './Register';
 import InfoTooltip from './InfoTooltip';
+import auth from '../utils/Auth';
 
 
 function App() {
@@ -120,16 +121,7 @@ function App() {
 
   //пробросить данные для регистрации через АПИ
   function handleRegister(data) {
-    return fetch(`https://auth.nomoreparties.co/signup`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        password: data.password,
-        email: data.email,
-      })
-    }).then((response) => response.json())
+    auth.register(data)
       .then((data) => {
         //console.log(data);
         setIsRegisterPopupOpened(true); // при положительном ответе открыть попап подверждения регистрации
@@ -147,16 +139,7 @@ function App() {
 
   //пробросить данные из инпутов и отправить на сервер для авторизации пользователя
   function handleLogin(dataUser) {
-    return fetch(`https://auth.nomoreparties.co/signin`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        password: dataUser.password,
-        email: dataUser.email,
-      })
-    }).then((response) => { return response.json() })
+    auth.login(dataUser)
       .then((data) => {
         if (data.message === 'Incorrect email address or password') {
           console.log('не корректные данные');
@@ -175,14 +158,7 @@ function App() {
 
   //запрос на сервер для авторизации
   function getAuth(tkn) {
-    return fetch(`https://auth.nomoreparties.co/users/me`, {
-      method: 'GET',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${tkn}`,
-      }
-    }).then(res => res.json())
+    auth.getToken(tkn)
       .then(() => {
         setLoggedIn(true);
       })
