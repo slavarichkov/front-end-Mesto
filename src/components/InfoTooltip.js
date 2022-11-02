@@ -4,7 +4,7 @@ import Successfully from './../images/Union successfully.svg'
 import Unsuccessfully from './../images/Union unsuccessful.svg'
 import Loading from '../images/loading_circles_small.gif'
 
-function InfoTooltip({ isRegister, isClose, isAuth }) {
+function InfoTooltip({ isRegister, isClose, isAuth, textError }) {
     //заготовка под изображение и текст ошибки 
     function message(url, title, loader) {
         return (
@@ -20,7 +20,7 @@ function InfoTooltip({ isRegister, isClose, isAuth }) {
         if (isRegister) {
             return message(Successfully, 'Вы успешно зарегистрировались! Переход на страницу авторизации', Loading)
         } else if (isAuth) {
-            return message(Unsuccessfully, 'Что-то пошло не так! Попробуйте ещё раз.')
+            return message(Unsuccessfully, `Что-то пошло не так! Попробуйте ещё раз. ${textError}`)
         }
     }
 

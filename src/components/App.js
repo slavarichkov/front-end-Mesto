@@ -31,6 +31,7 @@ function App() {
   const [isRegisterPopupOpened, setIsRegisterPopupOpened] = useState(false);
   const [isAuthUnsuccessfull, setIsAuthUserUnsuccessfull] = useState(false);
   const [registerIn, setRegisterIn] = useState(false);
+  const [textErrorRegister, setTextErrorRegister] = useState('');
   const popupClosedState = [  // необходимо для использования в useEffect и закрытия попапов
     isEditAvatarPopupOpen,
     isAddPlacePopupOpen,
@@ -230,16 +231,27 @@ function App() {
   function handleRegister(data) {
     auth.register(data)
       .then((data) => {
-        setIsRegisterPopupOpened(true); // при положительном ответе открыть попап подверждения регистрации
-        setTimeout(() => { // закрыть подверждение через 3 сек.
-          setIsRegisterPopupOpened(false);
-          setRegisterIn(false);
-        }, 3000);
-        setRegisterIn(true);
+        console.log(typeof data['message']);
+        console.log(data)
+        //записать в переменную ошибку -> вывести в инф.окно
+        let messageError = data.message;
+        if (Object.keys(data).includes('message')) { messageError = data.message }
+        else if (Object.keys(data).includes('error')) { messageError = data.error }
+        //проверить ответ сервера на содержание, есть ли ошибки
+        if (Object.keys(data).includes('message') || Object.keys(data).includes('error')) {
+          setTextErrorRegister(messageError); // передать текст ошибки в инф.окно
+          setIsAuthUserUnsuccessfull(true)
+        } else {
+          setIsRegisterPopupOpened(true); // при положительном ответе открыть попап подверждения регистрации
+          setTimeout(() => { // закрыть подверждение через 3 сек.
+            setIsRegisterPopupOpened(false);
+            setRegisterIn(false);
+          }, 3000);
+          setRegisterIn(true);
+        }
       })
       .catch((err) => {
-        console.log(err); console.log(1212
-        )
+        console.log(err);
       });
   };
 
@@ -325,7 +337,7 @@ function App() {
         </Switch>
         <Footer loggedIn={loggedIn} />
         {/* Информационное окно об успешной регистрации */}
-        <InfoTooltip isRegister={isRegisterPopupOpened} isClose={closeAllPopups} isAuth={isAuthUnsuccessfull} />
+        <InfoTooltip isRegister={isRegisterPopupOpened} isClose={closeAllPopups} isAuth={isAuthUnsuccessfull} textError={textErrorRegister} />
         {/**  <!--Попап Редактирование профиля --> */}
         <EditProfilePopup isOpen={isEditProfilePopupOpen} isClose={closeAllPopups} onUpdateUser={handleUpdateUser} />
         {/** <!--Попап добавление изображений(карточек) пользователем --> */}
