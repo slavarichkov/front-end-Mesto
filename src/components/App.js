@@ -16,7 +16,6 @@ import Register from './Register';
 import InfoTooltip from './InfoTooltip';
 import auth from '../utils/Auth';
 
-
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -231,7 +230,7 @@ function App() {
   function handleRegister(data) {
     auth.register(data)
       .then((data) => {
-        
+
         //записать в переменную ошибку -> вывести в инф.окно
         let messageError = data.message;
         if (Object.keys(data).includes('message')) { messageError = data.message }
