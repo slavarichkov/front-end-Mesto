@@ -25,8 +25,6 @@ function Login({ onLogin }) {
             email: email,
             password: password,
         });
-        setEmail('');
-        setPassword('');
     }
 
     return (

@@ -16,6 +16,7 @@ function InfoTooltip({ isRegister, isClose, isAuth, textError }) {
         )
     }
     //отрисовать окно с сообщением
+
     function showMessage() {
         if (isRegister) {
             return message(Successfully, 'Вы успешно зарегистрировались! Переход на страницу авторизации', Loading)
