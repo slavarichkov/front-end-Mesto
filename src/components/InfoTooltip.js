@@ -6,11 +6,11 @@ import Loading from '../images/loading_circles_small.gif'
 
 function InfoTooltip({ isRegister, isClose, isAuth, textError }) {
     //заготовка под изображение и текст ошибки 
-    function message(url, title, loader) {
+    function message(url, title, textError1, loader) {
         return (
             <>
                 <img className='popup__img-info-tooltip' src={url} />
-                <h2 className='popup__text-info-tooltip'>{title}</h2>
+                <h2 className='popup__text-info-tooltip'>{title}<br />{textError1} </h2>
                 <img className='popup__img-info-tooltip-loading' src={loader} />
             </>
         )
@@ -19,9 +19,9 @@ function InfoTooltip({ isRegister, isClose, isAuth, textError }) {
 
     function showMessage() {
         if (isRegister) {
-            return message(Successfully, 'Вы успешно зарегистрировались! Переход на страницу авторизации', Loading)
+            return message(Successfully, 'Вы успешно зарегистрировались! Переход на страницу авторизации', '',  Loading)
         } else if (isAuth) {
-            return message(Unsuccessfully, `Что-то пошло не так! Попробуйте ещё раз. ${textError}`)
+            return message(Unsuccessfully, `Что-то пошло не так! Попробуйте ещё раз.`, textError)
         }
     }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PopupWithForm from './PopupWithForm';
 
 function Login({ onLogin }) {
@@ -38,7 +38,7 @@ function Login({ onLogin }) {
             buttonVisibleControl='popup__close-button_unvisibled'
             textButtonSubmit='Войти'
             colorButtonSubmit='popup__button_color'
-            validationOptions= {(validationEmail === '' && validationPassword === '') ? false : true}
+            validationOptions={(validationEmail === '' && validationPassword === '') ? false : true} // проверка на пустые инпуты для блокировки кнопки сабмита
             children={
                 <>
                     <div className="popup__input-conainer popup__input-conainer_auth">
