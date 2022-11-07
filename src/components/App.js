@@ -116,7 +116,7 @@ function App() {
     setIsAddPlacePopupOpen(true);
   }
 
-  function handleDeletePlaceClick() {
+  function handleDeletePlaceClick() { // в процессе реализации
     setIsDeletePlace(true);
   }
 
@@ -230,7 +230,6 @@ function App() {
   function handleRegister(data) {
     auth.register(data)
       .then((data) => {
-
         //записать в переменную ошибку -> вывести в инф.окно
         let messageError = data.message;
         if (Object.keys(data).includes('message')) { messageError = data.message }
@@ -259,6 +258,7 @@ function App() {
       .then((data) => {
         if (data.message === 'Incorrect email address or password') {
           setIsAuthUserUnsuccessfull(true);
+          setTextErrorRegister(data.message); // передать текст ошибки в инф.окно
         } else {
           localStorage.setItem('token', data.token);
           localStorage.setItem("email", dataUser.email);

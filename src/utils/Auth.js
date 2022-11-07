@@ -3,6 +3,17 @@ class Auth {
         this.host = data.host;
     }
 
+    // проверка статуса запроса
+    _getResponse(res) {
+        if (res.ok) {
+            return res.json();
+        } else {
+            return Promise.reject(
+                `ошибка: ${res.status} - ${res.statusText}`
+            );
+        }
+    }
+
     //пробросить данные для регистрации через АПИ
     register(data) {
         return fetch(`${this.host}/signup`, {

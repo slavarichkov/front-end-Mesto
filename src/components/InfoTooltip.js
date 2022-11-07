@@ -6,11 +6,11 @@ import Loading from '../images/loading_circles_small.gif'
 
 function InfoTooltip({ isRegister, isClose, isAuth, textError }) {
     //заготовка под изображение и текст ошибки 
-    function message(url, title, textError1, loader) {
+    function message(url, title, textErrorOn, loader) {
         return (
             <>
                 <img className='popup__img-info-tooltip' src={url} />
-                <h2 className='popup__text-info-tooltip'>{title}<br />{textError1} </h2>
+                <h2 className='popup__text-info-tooltip'>{title}<br />{textErrorOn} </h2>
                 <img className='popup__img-info-tooltip-loading' src={loader} />
             </>
         )
