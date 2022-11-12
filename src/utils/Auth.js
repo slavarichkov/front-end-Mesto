@@ -25,7 +25,7 @@ class Auth {
                 password: data.password,
                 email: data.email,
             })
-        }).then((response) => response.json())
+        }).then((res) => this._getResponse(res))
     };
 
     //пробросить данные из инпутов и отправить на сервер для авторизации пользователя
@@ -39,7 +39,7 @@ class Auth {
                 password: dataUser.password,
                 email: dataUser.email,
             })
-        }).then((response) => { return response.json() })
+        }).then((res) => { return res.json() })
     };
 
     //запрос на сервер для авторизации
@@ -51,7 +51,7 @@ class Auth {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${tkn}`,
             }
-        }).then(res => res.json())
+        }).then((res) => this._getResponse(res))
     }
 
 }
