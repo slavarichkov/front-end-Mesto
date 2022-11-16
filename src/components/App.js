@@ -163,7 +163,7 @@ function App() {
         document.removeEventListener('keydown', handleCloseAllPopupsEcs);
       }
     }
-  }, popupClosedState);
+  }, [popupClosedState]);
 
   // ...Работа с карточками...
 
@@ -200,12 +200,11 @@ function App() {
   function handleCardDelete(cardId) {
     setLoading(true);
     api.deleteCard(cardId)
-      .then((newCard) => {
+      .then(() => {
         setLoading(false);
         setCards((cards) => cards.filter((c) => c._id !== cardId))
-          .catch((err) => {
-            console.log(err);
-          })
+      }).catch((err) => {
+        console.log(err);
       })
   }
 
@@ -230,6 +229,7 @@ function App() {
   function handleRegister(data) {
     auth.register(data)
       .then((data) => {
+        console.log(data);
         //записать в переменную ошибку -> вывести в инф.окно
         let messageError = data.message;
         if (Object.keys(data).includes('message')) { messageError = data.message }
@@ -249,6 +249,7 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
+        setIsAuthUserUnsuccessfull(false);
       });
   };
 

@@ -25,7 +25,7 @@ class Auth {
                 password: data.password,
                 email: data.email,
             })
-        }).then((res) => this._getResponse(res))
+        }).then((response) => response.json())
     };
 
     //пробросить данные из инпутов и отправить на сервер для авторизации пользователя
