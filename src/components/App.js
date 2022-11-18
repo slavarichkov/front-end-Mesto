@@ -229,7 +229,6 @@ function App() {
   function handleRegister(data) {
     auth.register(data)
       .then((data) => {
-        console.log(data);
         //записать в переменную ошибку -> вывести в инф.окно
         let messageError = data.message;
         if (Object.keys(data).includes('message')) { messageError = data.message }
