@@ -3,17 +3,6 @@ class Auth {
         this.host = data.host;
     }
 
-    // проверка статуса запроса
-    _getResponse(res) {
-        if (res.ok) {
-            return res.json();
-        } else {
-            return Promise.reject(
-                `ошибка: ${res.status} - ${res.statusText}`
-            );
-        }
-    }
-
     //пробросить данные для регистрации через АПИ
     register(data) {
         return fetch(`${this.host}/signup`, {
@@ -25,7 +14,8 @@ class Auth {
                 password: data.password,
                 email: data.email,
             })
-        }).then((response) => response.json())
+        }).then((res) => res.json())
+            .catch((err) => console.log(err))
     };
 
     //пробросить данные из инпутов и отправить на сервер для авторизации пользователя
@@ -40,6 +30,7 @@ class Auth {
                 email: dataUser.email,
             })
         }).then((res) => { return res.json() })
+            .catch((err) => console.log(err))
     };
 
     //запрос на сервер для авторизации
@@ -51,7 +42,8 @@ class Auth {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${tkn}`,
             }
-        }).then((res) => this._getResponse(res))
+        }).then((res) => res.json())
+            .catch((err) => console.log(err))
     }
 
 }
