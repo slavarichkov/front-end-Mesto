@@ -21,7 +21,7 @@ API
 CRUD
 Приложение адаптивно под различные виды разрешения экранов начиная от мобильных устройств
 
-### Ссылка https://slavarichkov.github.io/front-mesto/
+### Ссылка https://slavarichkov.github.io/front-end-Mesto/
 
 
 
