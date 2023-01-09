@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/front-end-Mesto/static/css/main.866e103e.css",
-    "main.js": "/front-end-Mesto/static/js/main.24e9ef3f.js",
+    "main.js": "/front-end-Mesto/static/js/main.c599e2d7.js",
     "static/js/787.ab201b9c.chunk.js": "/front-end-Mesto/static/js/787.ab201b9c.chunk.js",
     "static/media/loading_circles_small.gif": "/front-end-Mesto/static/media/loading_circles_small.0d7e34d92d3b947387ad.gif",
     "static/media/Inter-Medium.woff": "/front-end-Mesto/static/media/Inter-Medium.9053572c46aeb4b16caa.woff",
@@ -18,11 +18,11 @@
     "static/media/RectangleRect.svg": "/front-end-Mesto/static/media/RectangleRect.bed8c136e13907f5eefb.svg",
     "static/media/CloseIcon.svg": "/front-end-Mesto/static/media/CloseIcon.622e8cdafa2222aa7c54.svg",
     "main.866e103e.css.map": "/front-end-Mesto/static/css/main.866e103e.css.map",
-    "main.24e9ef3f.js.map": "/front-end-Mesto/static/js/main.24e9ef3f.js.map",
+    "main.c599e2d7.js.map": "/front-end-Mesto/static/js/main.c599e2d7.js.map",
     "787.ab201b9c.chunk.js.map": "/front-end-Mesto/static/js/787.ab201b9c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.866e103e.css",
-    "static/js/main.24e9ef3f.js"
+    "static/js/main.c599e2d7.js"
   ]
 }
