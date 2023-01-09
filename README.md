@@ -11,7 +11,14 @@
 Смены имени пользователя и его аватара
 
 ## Стек
-HTML, CSS, React
+HTML
+CSS (flex,grid,animations, media queries)
+JS
+React (useState, useEffect, React Router)
+ООП
+API
+БЭМ
+CRUD
 Приложение адаптивно под различные виды разрешения экранов начиная от мобильных устройств
 
 ### Ссылка https://slavarichkov.github.io/react-mesto-auth/
